@@ -22,9 +22,8 @@ pipeline {
         stage('Push Docker Image') {
             steps {
                 script {
-                    docker.withRegistry('https://registry.hub.docker.com', 'docker_hub_login') {
-                        app.push("${env.BUILD_NUMBER}")
-                        app.push("latest")
+                    withDockerRegistry(credentialsId: 'docker_hub_login', url: 'https://index.docker.io/v1') {
+                        sh 'sudo docker push riyasr1/train-schedule:$BUILD_NUMBER'
                     }
                 }
             }
