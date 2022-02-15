@@ -15,7 +15,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    sh 'docker build -t riyas/train-schedule .'
+                    sh 'sudo docker build -t riyas/train-schedule .'
                 }
             }
         }
