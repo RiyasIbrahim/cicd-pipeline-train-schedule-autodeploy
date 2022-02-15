@@ -13,22 +13,35 @@ pipeline {
             }
         }
         stage('Build Docker Image') {
+            when {
+                branch 'master'
+            }
             steps {
                 script {
-                    sh 'sudo docker build -t riyasr1/train-schedule .'
+                    app = docker.build(DOCKER_IMAGE_NAME)
+                    app.inside {
+                        sh 'echo Hello, World!'
+                    }
                 }
             }
         }
         stage('Push Docker Image') {
+            when {
+                branch 'master'
+            }
             steps {
                 script {
-                    withDockerRegistry(credentialsId: 'docker_hub_login', url: 'https://index.docker.io/v1') {
-                        sh 'sudo docker push riyasr1/train-schedule:$BUILD_NUMBER'
+                    docker.withRegistry('https://registry.hub.docker.com', 'docker_hub_login') {
+                        app.push("${env.BUILD_NUMBER}")
+                        app.push("latest")
                     }
                 }
             }
         }
         stage('CanaryDeploy') {
+            when {
+                branch 'master'
+            }
             environment { 
                 CANARY_REPLICAS = 1
             }
@@ -41,6 +54,9 @@ pipeline {
             }
         }
         stage('DeployToProduction') {
+            when {
+                branch 'master'
+            }
             environment { 
                 CANARY_REPLICAS = 0
             }
