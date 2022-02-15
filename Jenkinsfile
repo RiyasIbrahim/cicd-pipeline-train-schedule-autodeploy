@@ -2,7 +2,7 @@ pipeline {
     agent any
     environment {
         //be sure to replace "bhavukm" with your own Docker Hub username
-        DOCKER_IMAGE_NAME = "riyas/train-schedule"
+        DOCKER_IMAGE_NAME = "riyasr1/train-schedule"
     }
     stages {
         stage('Build') {
@@ -15,7 +15,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    sh 'sudo docker build -t riyas/train-schedule .'
+                    sh 'sudo docker build -t riyasr1/train-schedule .'
                 }
             }
         }
